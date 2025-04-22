@@ -21,7 +21,7 @@ public class Menu {
     private String libelleMenu;
     @Enumerated(EnumType.STRING)
     private TypeMenu typeMenu;
-    private Float prixTotal;
+    private double prixTotal;
     @ManyToOne
     private Restaurant restaurant;
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)

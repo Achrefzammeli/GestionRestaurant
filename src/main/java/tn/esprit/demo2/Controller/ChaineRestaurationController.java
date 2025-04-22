@@ -5,10 +5,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.demo2.Services.ChaineRestaurationService;
+import tn.esprit.demo2.Services.MenuService;
 import tn.esprit.demo2.entities.ChaineRestauration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.demo2.entities.Menu;
+import tn.esprit.demo2.repositories.MenuRepository;
+
 import java.util.List;
 
 @RestController
@@ -17,6 +21,12 @@ public class ChaineRestaurationController {
 
     @Autowired
     private ChaineRestaurationService chaineRestaurationService;
+    @Autowired
+    private MenuService menuService;
+    @PostMapping("/menu")
+    public Menu createMenu(@RequestBody Menu menu){
+        return menuService.createMenu(menu);
+    }
 
     // Create a new chaine de restauration
     @PostMapping
