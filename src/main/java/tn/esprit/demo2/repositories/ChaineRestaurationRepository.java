@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface ChaineRestaurationRepository extends JpaRepository<ChaineRestauration, Long> {
+    ChaineRestauration findByLibelle(String libelle);
 }

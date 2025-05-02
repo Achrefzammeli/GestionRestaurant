@@ -4,4 +4,5 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.demo2.entities.Restaurant;
 @Repository
 public interface RestaurantRepository extends JpaRepository <Restaurant, Long>{
+    Restaurant findByNom(String nom);
 }

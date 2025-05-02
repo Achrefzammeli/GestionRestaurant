@@ -5,4 +5,5 @@ import tn.esprit.demo2.entities.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long>
         {
+    Client findByIdentifiant(String identifiant);
 }

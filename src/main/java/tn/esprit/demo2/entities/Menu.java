@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -33,4 +34,47 @@ public class Menu {
             joinColumns = @JoinColumn(name = "menu_id"),
             inverseJoinColumns = @JoinColumn(name = "chef_id"))
     private List<ChefCuisinier> chefs;
+
+    @ManyToOne
+    private ChefCuisinier chefCuisinier;
+
+    public Long getId() {
+        return idMenu;
+    }
+
+    public void setId(Long id) {
+        this.idMenu = id;
+    }
+
+    public String getLibelle() {
+        return libelleMenu;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelleMenu = libelle;
+    }
+
+    public Double getPrixTotal() {
+        return prixTotal;
+    }
+
+    public void setPrixTotal(Double prixTotal) {
+        this.prixTotal = prixTotal;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public ChefCuisinier getChefCuisinier() {
+        return chefCuisinier;
+    }
+
+    public void setChefCuisinier(ChefCuisinier chefCuisinier) {
+        this.chefCuisinier = chefCuisinier;
+    }
 }

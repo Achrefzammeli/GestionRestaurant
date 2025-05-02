@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface MenuRepository  extends JpaRepository<Menu, Long> {
-
+    Menu findByLibelleMenu(String libelleMenu);
 }

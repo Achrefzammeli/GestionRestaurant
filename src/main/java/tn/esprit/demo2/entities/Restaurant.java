@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.List;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -20,4 +22,39 @@ public class Restaurant {
     private List<Menu> menuList;
     @ManyToOne
     private ChaineRestauration chaineRestauration;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private Set<Menu> menus;
+
+    // Getters and Setters
+    public Long getId() {
+        return idRestaurant;
+    }
+
+    public void setId(Long id) {
+        this.idRestaurant = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public ChaineRestauration getChaineRestauration() {
+        return chaineRestauration;
+    }
+
+    public void setChaineRestauration(ChaineRestauration chaineRestauration) {
+        this.chaineRestauration = chaineRestauration;
+    }
+
+    public Set<Menu> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(Set<Menu> menus) {
+        this.menus = menus;
+    }
 }
