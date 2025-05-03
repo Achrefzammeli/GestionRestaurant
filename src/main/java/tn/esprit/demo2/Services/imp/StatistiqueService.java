@@ -1,33 +1,53 @@
 package tn.esprit.demo2.Services.imp;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.demo2.repositories.CommandeRepository;
+import tn.esprit.demo2.Services.IStatistiqueService;
+import tn.esprit.demo2.entities.Menu;
+import tn.esprit.demo2.entities.Restaurant;
+import tn.esprit.demo2.entities.TypeMenu;
+import tn.esprit.demo2.repositories.MenuRepository;
+import tn.esprit.demo2.repositories.RestaurantRepository;
 
 import java.util.List;
 
 @Service
-public class StatistiqueService {
-    private final CommandeRepository commandeRepository;
+public class StatistiqueService implements IStatistiqueService {
 
-    public StatistiqueService(CommandeRepository commandeRepository) {
-        this.commandeRepository = commandeRepository;
+    @Autowired
+    private MenuRepository menuRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Override
+    public List<Menu> getMenusByType(String typeMenu) {
+        try {
+            TypeMenu type = TypeMenu.valueOf(typeMenu);
+            return menuRepository.findByTypeMenu(type);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Type de menu invalide. Les types valides sont : PETITDEJUNER, DEJEUNER, DINER");
+        }
     }
 
-    @Scheduled(fixedRate = 10000) // Exécution toutes les 10 secondes (modifiable)
-    public void menuPlusCommande() {
-        List<Object[]> resultats = commandeRepository.findMenuPlusCommande();
+    @Override
+    public List<Restaurant> getRestaurantsByChaine(String libelleChaine) {
+        return restaurantRepository.findByChaineRestaurationLibelle(libelleChaine);
+    }
 
-        if (!resultats.isEmpty()) {
-            Object[] top = resultats.get(0);
-            String libelleMenu = (String) top[0];
-            Long nombreCommandes = (Long) top[1];
+    @Override
+    public Double getMoyennePrixMenus() {
+        return menuRepository.getMoyennePrixMenus();
+    }
 
-            System.out.printf("Le menu le plus commandé dans votre restaurant est %s commandé %d fois%n",
-                    libelleMenu, nombreCommandes);
-        } else {
-            System.out.println("Aucune commande enregistrée.");
-        }
+    @Override
+    public List<Menu> getMenusPlusChersQue(Double prix) {
+        return menuRepository.findMenusPlusChersQue(prix);
+    }
+
+    @Override
+    public List<Restaurant> getRestaurantsAvecPlusDeMenus(int nombreMinMenus) {
+        return restaurantRepository.findRestaurantsAvecPlusDeMenus(nombreMinMenus);
     }
 }
 

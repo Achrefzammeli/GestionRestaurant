@@ -25,14 +25,39 @@ public class RestaurantController {
     private MenuService menuService;
     @Autowired
     private IRestaurantService restaurantService;
+
+    // Endpoints pour les menus
+    @GetMapping("/menu")
+    public List<Menu> getAllMenus() {
+        return menuService.getAllMenus();
+    }
+
+    @GetMapping("/menu/{id}")
+    public ResponseEntity<Menu> getMenuById(@PathVariable Long id) {
+        Optional<Menu> menu = menuService.getMenuById(id);
+        return menu.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/menu")
-    public Menu addMenu(Menu menu){
+    public Menu createMenu(@RequestBody Menu menu) {
         return menuService.createMenu(menu);
     }
-    @PostMapping("/{idMenu}/composants")
-    public String ajouterComposantsAuMenu(@PathVariable Long idMenu, @RequestBody Set<Composant> composants) {
-        return menuService.ajoutComposantsEtMiseAjourPrixMenu(composants, idMenu);
+
+    @PutMapping("/menu/{id}")
+    public ResponseEntity<Menu> updateMenu(@PathVariable Long id, @RequestBody Menu menu) {
+        Menu updatedMenu = menuService.updateMenu(id, menu);
+        return updatedMenu != null ? ResponseEntity.ok(updatedMenu) : ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/menu/{id}")
+    public ResponseEntity<Void> deleteMenu(@PathVariable Long id) {
+        if (menuService.getMenuById(id).isPresent()) {
+            menuService.deleteMenu(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     // Get all restaurants
     @GetMapping
     public List<Restaurant> getAllRestaurants() {
@@ -46,6 +71,15 @@ public class RestaurantController {
     @PostMapping
     public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
         return restaurantRepository.save(restaurant);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Long id, @RequestBody Restaurant restaurant) {
+        if (!restaurantRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        restaurant.setId(id);
+        return ResponseEntity.ok(restaurantRepository.save(restaurant));
     }
 
     @DeleteMapping("/{id}")

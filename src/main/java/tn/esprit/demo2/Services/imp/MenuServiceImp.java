@@ -25,38 +25,41 @@ public class MenuServiceImp implements MenuService {
 
     @Override
     public List<Menu> getAllMenus() {
-        return null;
+        return menuRepository.findAll();
     }
 
     @Override
     public Optional<Menu> getMenuById(Long id) {
-        return Optional.empty();
+        return menuRepository.findById(id);
     }
 
     @Override
-    public Menu updateMenu(Long id, Menu menuDetails) {
+    public Menu updateMenu(Long id, Menu menu) {
+        if (menuRepository.existsById(id)) {
+            menu.setId(id);
+            return menuRepository.save(menu);
+        }
         return null;
     }
 
     @Override
     public void deleteMenu(Long id) {
-
+        menuRepository.deleteById(id);
     }
 
     @Override
-    public String  ajoutComposantsEtMiseAjourPrixMenu(Set<Composant> composants, Long idMenu) {
-            Menu menu = menuRepository.findById(idMenu).orElseThrow(()->new RuntimeException("idmenu non trouvé"));
+    public String ajoutComposantsEtMiseAjourPrixMenu(Set<Composant> composants, Long idMenu) {
+        Optional<Menu> menuOpt = menuRepository.findById(idMenu);
+        if (menuOpt.isPresent()) {
+            Menu menu = menuOpt.get();
             menu.getComposants().addAll(composants);
-        double nouveauPrix = 0.0;
-        for (Composant composant : composants) {
-            nouveauPrix += composant.getPrix();}
-
-        if (nouveauPrix > 20.0) {
-            return "Erreur";
-            }
+            double nouveauPrix = menu.getPrixTotal() + composants.stream()
+                    .mapToDouble(Composant::getPrix)
+                    .sum();
             menu.setPrixTotal(nouveauPrix);
             menuRepository.save(menu);
-            return "succès";
-
+            return "Composants ajoutés avec succès et prix mis à jour";
+        }
+        return "Menu non trouvé";
     }
 }
