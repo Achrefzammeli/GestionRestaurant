@@ -1,6 +1,7 @@
 package tn.esprit.demo2.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.demo2.entities.*;
@@ -26,6 +27,13 @@ public class RestaurantService implements IRestaurantService {
     private ClientRepository clientRepository;
     @Autowired
     private CommandeRepository commandeRepository;
+
+    @Scheduled(fixedRate = 30000)
+    public void afficherClassementClients() {
+        List<String> classement = this.classifierUtilisateursParInteraction();
+        System.out.println("Classement périodique des clients :");
+        classement.forEach(System.out::println);
+    }
 
     @Override
     public List<String> nomMenuParTypeMenuOrdonneParPrixTotal(TypeMenu typeMenu) {

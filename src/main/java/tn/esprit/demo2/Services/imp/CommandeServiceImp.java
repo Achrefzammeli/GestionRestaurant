@@ -17,7 +17,7 @@ public class CommandeServiceImp  {
         this.commandeRepository = commandeRepository;
     }
 
-        @Scheduled(cron = "0 0/30 11 * * *") // Exécution quotidienne à 9h
+        @Scheduled(cron = "0 0/5 * * * *") // Exécution quotidienne à 9h
         public void findCurrentYearCommandesOrderByNote () {
             int currentYear = Year.now().getValue();
             LocalDate startDate = LocalDate.of(currentYear, 1, 1);

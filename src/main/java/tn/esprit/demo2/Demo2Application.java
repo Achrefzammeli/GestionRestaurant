@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
-@EnableScheduling
+
 
 @SpringBootApplication
-@ComponentScan(basePackages = "tn.esprit.demo2")
+@EnableScheduling
 public class Demo2Application {
 
     public static void main(String[] args) {
