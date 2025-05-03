@@ -3,6 +3,8 @@ package tn.esprit.demo2.Services;
 import tn.esprit.demo2.entities.*;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public interface IRestaurantService {
     List<String> nomMenuParTypeMenuOrdonneParPrixTotal(TypeMenu typeMenu);
@@ -15,4 +17,5 @@ public interface IRestaurantService {
     ChefCuisinier desaffecterChefCuisinierDuMenu(Long idMenu, Long idChefCuisinier);
     void ajouterCommandeEtaffecterAClientEtMenu(Commande commande, String identifiant, String libelleMenu);
     Commande affecterNoteACommande(Long idCommande, Long note);
+    List<String> classifierUtilisateursParInteraction();
 } 

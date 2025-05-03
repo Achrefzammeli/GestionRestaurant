@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.HashSet;
 
 @Service
 public class RestaurantService implements IRestaurantService {
@@ -135,5 +136,36 @@ public class RestaurantService implements IRestaurantService {
             return commandeRepository.save(commande);
         }
         return null;
+    }
+
+    @Override
+    public List<String> classifierUtilisateursParInteraction() {
+        List<Client> clients = clientRepository.findAll();
+        List<String> result = new ArrayList<>();
+        for (Client c : clients) {
+            double score = 0;
+            if (c.getCommandes() != null) {
+                score = c.getCommandes().size() * 10;
+            }
+            c.setScore(score);
+
+            // Classification
+            if (score < 10) c.setClasseUtilisateur(ClasseUtilisateur.INACTIF);
+            else if (score < 30) c.setClasseUtilisateur(ClasseUtilisateur.OCCASIONNEL);
+            else if (score < 70) c.setClasseUtilisateur(ClasseUtilisateur.ACTIF);
+            else c.setClasseUtilisateur(ClasseUtilisateur.VIP);
+
+            // Privilèges
+            Set<String> privileges = new HashSet<>();
+            if (c.getClasseUtilisateur() == ClasseUtilisateur.ACTIF || c.getClasseUtilisateur() == ClasseUtilisateur.VIP) {
+                privileges.add("REMISSE_EXCEP");
+                privileges.add("VISUALISATION_AVANT");
+            }
+            c.setPrivileges(privileges);
+
+            clientRepository.save(c);
+            result.add(c.getNom() + " " + c.getPrenom() + " : " + score + " (" + c.getClasseUtilisateur() + ")");
+        }
+        return result;
     }
 }
