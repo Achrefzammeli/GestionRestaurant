@@ -11,6 +11,9 @@ import tn.esprit.demo2.repositories.RestaurantRepository;
 import tn.esprit.demo2.Services.IRestaurantService;
 import tn.esprit.demo2.entities.ChefCuisinier;
 import tn.esprit.demo2.entities.Commande;
+import tn.esprit.demo2.entities.TypeChef;
+import tn.esprit.demo2.repositories.ChefCuisinierRepository;
+import tn.esprit.demo2.entities.TypeMenu;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,8 @@ public class RestaurantController {
     private MenuService menuService;
     @Autowired
     private IRestaurantService restaurantService;
+    @Autowired
+    private ChefCuisinierRepository chefCuisinierRepository;
 
     // Endpoints pour les menus
     @GetMapping("/menu")
@@ -130,5 +135,24 @@ public class RestaurantController {
             @RequestParam Long idCommande,
             @RequestParam Long note) {
         return restaurantService.affecterNoteACommande(idCommande, note);
+    }
+
+    @GetMapping("/chefs")
+    public List<ChefCuisinier> getChefsByTypeAndRestaurant(
+            @RequestParam TypeChef typeChef,
+            @RequestParam String nomRestaurant) {
+        return restaurantService.listChefCuisinierByTypeChefAndRestaurant(typeChef, nomRestaurant);
+    }
+
+    @PostMapping("/chefs")
+    public ChefCuisinier createChef(@RequestBody ChefCuisinier chef) {
+        return chefCuisinierRepository.save(chef);
+    }
+
+    @GetMapping("/menus/filtre")
+    public List<Menu> getMenusByTypeAndPrixComposant(
+            @RequestParam TypeMenu typeMenu,
+            @RequestParam Float prixTotal) {
+        return restaurantService.listeMenuSelonTypeMenuEtprixComposantsSuperieurAUnMontant(typeMenu, prixTotal);
     }
 }

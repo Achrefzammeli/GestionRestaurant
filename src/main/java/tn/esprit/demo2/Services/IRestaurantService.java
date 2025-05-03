@@ -1,10 +1,14 @@
 package tn.esprit.demo2.Services;
 
-import tn.esprit.demo2.entities.Restaurant;
-import tn.esprit.demo2.entities.ChefCuisinier;
-import tn.esprit.demo2.entities.Commande;
+import tn.esprit.demo2.entities.*;
+import java.util.List;
+import java.util.Set;
 
 public interface IRestaurantService {
+    List<String> nomMenuParTypeMenuOrdonneParPrixTotal(TypeMenu typeMenu);
+    List<Menu> listeMenuSelonTypeMenuEtprixComposantsSuperieurAUnMontant(TypeMenu typeMenu, Float prixTotal);
+    Menu ajoutComposantsEtMiseAjourPrixMenu(Set<Composant> composants, Long idMenu);
+    List<ChefCuisinier> listChefCuisinierByTypeChefAndRestaurant(TypeChef typeChef, String nomRestaurant);
     Restaurant affecterRestaurantAChaineRestauration(String nomRestaurant, String libelleChaine);
     Restaurant ajoutRestaurantEtMenuAssocies(Restaurant restaurant);
     ChefCuisinier affecterChefCuisinierAMenu(Long idChefCuisinier, Long idMenu);

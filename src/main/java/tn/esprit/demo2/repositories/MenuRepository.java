@@ -22,4 +22,10 @@ public interface MenuRepository  extends JpaRepository<Menu, Long> {
 
     @Query("SELECT m FROM Menu m WHERE m.prixTotal > :prix ORDER BY m.prixTotal DESC")
     List<Menu> findMenusPlusChersQue(@Param("prix") Double prix);
+
+    @Query("SELECT m.libelleMenu FROM Menu m WHERE m.typeMenu = :typeMenu ORDER BY m.prixTotal")
+    List<String> findNomMenuByTypeMenuOrderByPrixTotal(@Param("typeMenu") TypeMenu typeMenu);
+
+    @Query("SELECT DISTINCT m FROM Menu m JOIN m.composants c WHERE m.typeMenu = :typeMenu AND c.prix > :prixTotal")
+    List<Menu> findMenusByTypeMenuAndComposantPrixGreaterThan(@Param("typeMenu") TypeMenu typeMenu, @Param("prixTotal") Float prixTotal);
 }
